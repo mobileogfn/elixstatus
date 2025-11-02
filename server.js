@@ -25,8 +25,8 @@ let status1 = {
 };
 
 let status2 = {
-  title: "EU LTM Server Loading!",
-  subtitle: "EU LTM Server Is Loading!",
+  title: "EU Duos Server Coming Soon!",
+  subtitle: "EU Duos Server Coming Soon!",
   color: "red",
   countdown: 0,
   countdownRunning: false
@@ -50,8 +50,8 @@ setInterval(() => {
     status2.subtitle = `The Bus Starts In ${status2.countdown} seconds`;
     status2.countdown--;
   } else if (status2.countdownRunning && status2.countdown <= 0) {
-    status2.subtitle = "EU LTM Server Is Starting Soon!";
-    status2.title = "EU LTM Server Starting!";
+    status2.subtitle = "EU Duos Server Is Starting Soon!";
+    status2.title = "EU Duos Server Starting!";
     status2.color = "yellow";
     status2.countdownRunning = false;
   }
@@ -86,14 +86,14 @@ client.on("messageCreate", (message) => {
 
   if (message.channelId === CHANNEL_ID_2) {
     if (content.includes("server up")) {
-      status2.title = "EU LTM Server Joinable!";
+      status2.title = "EU Duos Server Joinable!";
       status2.color = "limegreen";
       status2.countdown = 120;
       status2.countdownRunning = true;
     } else if (content.includes("server started")) {
       const number = extractNumber(content);
-      status2.title = "EU LTM Server Has Started!";
-      status2.subtitle = `The server is currently in the LTM phase with ${number} Players!`;
+      status2.title = "EU Duos Server Has Started!";
+      status2.subtitle = `The server is currently in the Duos phase with ${number} Players!`;
       status2.color = "yellow";
       status2.countdownRunning = false;
     } else if (content.includes("server crash")) {
@@ -113,3 +113,4 @@ app.get("/status", (req, res) => {
 client.login(process.env.DISCORD_TOKEN);
 
 app.listen(3000, () => console.log("Server running on port 3000"));
+
