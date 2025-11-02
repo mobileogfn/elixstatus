@@ -7,7 +7,6 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
 const client = new Client({
   intents: [
@@ -36,31 +35,34 @@ let status2 = {
 const CHANNEL_ID_1 = "1432106730162094185";
 const CHANNEL_ID_2 = "1432107616439500903";
 
-// Countdown update
 setInterval(() => {
-  [status1, status2].forEach(s => {
-    if (s.countdownRunning && s.countdown > 0) {
-      s.subtitle = `The Bus Starts In ${s.countdown} seconds`;
-      s.countdown--;
-    } else if (s.countdownRunning && s.countdown <= 0) {
-      s.subtitle = s === status1 
-        ? "EU Lategame Solo Server Is Starting Soon!" 
-        : "EU LTM Server Is Starting Soon!";
-      s.title = s === status1 
-        ? "EU Lategame Solo Server Starting!" 
-        : "EU LTM Server Starting!";
-      s.color = "yellow";
-      s.countdownRunning = false;
-    }
-  });
+  if (status1.countdownRunning && status1.countdown > 0) {
+    status1.subtitle = `The Bus Starts In ${status1.countdown} seconds`;
+    status1.countdown--;
+  } else if (status1.countdownRunning && status1.countdown <= 0) {
+    status1.subtitle = "EU Lategame Solo Server Is Starting Soon!";
+    status1.title = "EU Lategame Solo Server Starting!";
+    status1.color = "yellow";
+    status1.countdownRunning = false;
+  }
+
+  if (status2.countdownRunning && status2.countdown > 0) {
+    status2.subtitle = `The Bus Starts In ${status2.countdown} seconds`;
+    status2.countdown--;
+  } else if (status2.countdownRunning && status2.countdown <= 0) {
+    status2.subtitle = "EU LTM Server Is Starting Soon!";
+    status2.title = "EU LTM Server Starting!";
+    status2.color = "yellow";
+    status2.countdownRunning = false;
+  }
 }, 1000);
 
-client.on("messageCreate", message => {
+client.on("messageCreate", (message) => {
   if (message.author.bot) return;
   const content = message.content.toLowerCase();
+
   const extractNumber = text => text.match(/\d+/)?.[0] || "0";
 
-  // Server 1
   if (message.channelId === CHANNEL_ID_1) {
     if (content.includes("server up")) {
       status1.title = "EU Lategame Solo Server Joinable!";
@@ -82,7 +84,6 @@ client.on("messageCreate", message => {
     }
   }
 
-  // Server 2
   if (message.channelId === CHANNEL_ID_2) {
     if (content.includes("server up")) {
       status2.title = "EU LTM Server Joinable!";
@@ -105,12 +106,10 @@ client.on("messageCreate", message => {
   }
 });
 
-// Status endpoint
 app.get("/status", (req, res) => {
   res.json({ status1, status2 });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
 client.login(process.env.DISCORD_TOKEN);
+
+app.listen(3000, () => console.log("Server running on port 3000"));
