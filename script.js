@@ -1,37 +1,9 @@
-// Cubes background
-const NUM_CUBES = 6;
-const CUBE_SIZE = 100;
-const positions = [];
+// Backend URL — local testing or deployed server
+const BACKEND_URL = "http://localhost:3000";
 
-function isOverlapping(x, y, size, positions) {
-  for (let pos of positions) {
-    const dx = Math.abs(x - pos.x);
-    const dy = Math.abs(y - pos.y);
-    if (dx < size && dy < size) return true;
-  }
-  return false;
-}
-
-for (let i = 0; i < NUM_CUBES; i++) {
-  let x, y, attempts = 0;
-  do {
-    x = Math.random() * (window.innerWidth - CUBE_SIZE);
-    y = Math.random() * (window.innerHeight - CUBE_SIZE);
-    attempts++;
-  } while (isOverlapping(x, y, CUBE_SIZE, positions) && attempts < 100);
-
-  positions.push({ x, y });
-  const cube = document.createElement('div');
-  cube.className = 'cube';
-  cube.style.left = `${x}px`;
-  cube.style.top = `${y}px`;
-  document.body.appendChild(cube);
-}
-
-// Update server status
 async function updateStatus() {
   try {
-    const res = await fetch("/status");
+    const res = await fetch(`${BACKEND_URL}/status`);
     if (!res.ok) throw new Error("Network response not ok");
     const data = await res.json();
 
