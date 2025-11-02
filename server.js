@@ -7,9 +7,8 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // optional, if you ever want POST requests
+app.use(express.json());
 
-// Discord client setup
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -18,7 +17,6 @@ const client = new Client({
   ]
 });
 
-// Server status objects
 let status1 = {
   title: "EU Lategame Solo Server Loading!",
   subtitle: "EU Lategame Solo Server Is Loading!",
@@ -38,15 +36,15 @@ let status2 = {
 const CHANNEL_ID_1 = "1432106730162094185";
 const CHANNEL_ID_2 = "1432107616439500903";
 
-// Countdown timer
+// Countdown update
 setInterval(() => {
-  [status1, status2].forEach((s) => {
+  [status1, status2].forEach(s => {
     if (s.countdownRunning && s.countdown > 0) {
       s.subtitle = `The Bus Starts In ${s.countdown} seconds`;
       s.countdown--;
     } else if (s.countdownRunning && s.countdown <= 0) {
       s.subtitle = s === status1 
-        ? "EU Lategame Solo Server Is Starting Soon!"
+        ? "EU Lategame Solo Server Is Starting Soon!" 
         : "EU LTM Server Is Starting Soon!";
       s.title = s === status1 
         ? "EU Lategame Solo Server Starting!" 
@@ -57,13 +55,12 @@ setInterval(() => {
   });
 }, 1000);
 
-// Discord message listener
-client.on("messageCreate", (message) => {
+client.on("messageCreate", message => {
   if (message.author.bot) return;
   const content = message.content.toLowerCase();
   const extractNumber = text => text.match(/\d+/)?.[0] || "0";
 
-  // SERVER 1
+  // Server 1
   if (message.channelId === CHANNEL_ID_1) {
     if (content.includes("server up")) {
       status1.title = "EU Lategame Solo Server Joinable!";
@@ -85,7 +82,7 @@ client.on("messageCreate", (message) => {
     }
   }
 
-  // SERVER 2
+  // Server 2
   if (message.channelId === CHANNEL_ID_2) {
     if (content.includes("server up")) {
       status2.title = "EU LTM Server Joinable!";
@@ -108,12 +105,11 @@ client.on("messageCreate", (message) => {
   }
 });
 
-// Endpoint for frontend to fetch statuses
+// Status endpoint
 app.get("/status", (req, res) => {
   res.json({ status1, status2 });
 });
 
-// Listen on dynamic port for cloud hosting
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
