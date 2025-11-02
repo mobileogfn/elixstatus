@@ -1,12 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Elix Status</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Servers</title>
+<style>
+  body {
+    background: linear-gradient(135deg, #0b1220, #101a2f);
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    color: white;
+  }
+  .cube {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    animation: spin 10s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(45deg) scale(1); }
+    50% { transform: rotate(225deg) scale(1.2); }
+    100% { transform: rotate(405deg) scale(1); }
+  }
+  .container { position: relative; z-index: 5; padding: 40px 60px; }
+  h2 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  .server-card { background-color: #0000aa; border-radius: 4px; padding: 16px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .server-text { display: flex; flex-direction: column; }
+  .server-title { font-weight: bold; font-size: 18px; color: white; }
+  .server-subtitle { font-size: 14px; color: #b8b8ff; margin-top: 2px; }
+  .status-indicator { width: 16px; height: 16px; border-radius: 50%; background-color: yellow; flex-shrink: 0; }
+</style>
 </head>
 <body>
+
 <div class="container">
   <h2>Servers</h2>
 
@@ -27,6 +57,66 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+function randomPosition(cubes, size) {
+  const positions = [];
+  for (let i = 0; i < cubes.length; i++) {
+    let x, y;
+    let safe = false;
+    while (!safe) {
+      x = Math.random() * (window.innerWidth - size);
+      y = Math.random() * (window.innerHeight - size);
+      safe = true;
+      for (const pos of positions) {
+        if (Math.abs(pos.x - x) < size && Math.abs(pos.y - y) < size) {
+          safe = false;
+          break;
+        }
+      }
+    }
+    positions.push({x, y});
+    cubes[i].style.left = x + "px";
+    cubes[i].style.top = y + "px";
+  }
+}
+
+function createCubes(num) {
+  const cubes = [];
+  for (let i = 0; i < num; i++) {
+    const cube = document.createElement("div");
+    cube.classList.add("cube");
+    document.body.appendChild(cube);
+    cubes.push(cube);
+  }
+  randomPosition(cubes, 100);
+}
+
+createCubes(4); // create 4 cubes
+
+async function updateStatus() {
+  try {
+    const res = await fetch("http://localhost:3000/status");
+    if (!res.ok) throw new Error("Network response not ok");
+    const data = await res.json();
+
+    const s1 = data.status1;
+    const s2 = data.status2;
+
+    document.getElementById("server1Title").textContent = s1.title;
+    document.getElementById("server1Subtitle").textContent = s1.subtitle;
+    document.getElementById("server1Indicator").style.backgroundColor = s1.color;
+
+    document.getElementById("server2Title").textContent = s2.title;
+    document.getElementById("server2Subtitle").textContent = s2.subtitle;
+    document.getElementById("server2Indicator").style.backgroundColor = s2.color;
+
+  } catch (err) {
+    console.error("Failed to fetch server status:", err);
+  }
+}
+
+setInterval(updateStatus, 1000);
+updateStatus();
+</script>
 </body>
 </html>
