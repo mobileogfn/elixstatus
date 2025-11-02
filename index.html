@@ -32,7 +32,7 @@
   .server-text { display: flex; flex-direction: column; }
   .server-title { font-weight: bold; font-size: 18px; color: white; }
   .server-subtitle { font-size: 14px; color: #b8b8ff; margin-top: 2px; }
-  .status-indicator { width: 16px; height: 16px; border-radius: 50%; background-color: yellow; flex-shrink: 0; }
+  .status-indicator { width: 16px; height: 16px; border-radius: 50%; background-color: red; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -42,16 +42,16 @@
 
   <div class="server-card">
     <div class="server-text">
-      <span class="server-title" id="server1Title">EU Lategame Solo Server Starting!</span>
-      <span class="server-subtitle" id="server1Subtitle">EU Lategame Solo Server Is Starting Soon!</span>
+      <span class="server-title" id="server1Title">EU Lategame Solo Server Loading!</span>
+      <span class="server-subtitle" id="server1Subtitle">EU Lategame Solo Server Is Loading!</span>
     </div>
     <div class="status-indicator" id="server1Indicator"></div>
   </div>
 
   <div class="server-card">
     <div class="server-text">
-      <span class="server-title" id="server2Title">EU LTM Server Starting!</span>
-      <span class="server-subtitle" id="server2Subtitle">EU LTM Server Is Starting Soon!</span>
+      <span class="server-title" id="server2Title">EU LTM Server Loading!</span>
+      <span class="server-subtitle" id="server2Subtitle">EU LTM Server Is Loading!</span>
     </div>
     <div class="status-indicator" id="server2Indicator"></div>
   </div>
@@ -120,3 +120,4 @@ updateStatus();
 </script>
 </body>
 </html>
+
