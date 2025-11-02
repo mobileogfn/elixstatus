@@ -1,0 +1,31 @@
+body {
+  background: linear-gradient(135deg, #0b1220, #101a2f);
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+  color: white;
+}
+
+.cube {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(45deg) scale(1); }
+  50% { transform: rotate(225deg) scale(1.2); }
+  100% { transform: rotate(405deg) scale(1); }
+}
+
+.container { position: relative; z-index: 5; padding: 40px 60px; }
+h2 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+.server-card { background-color: #0000aa; border-radius: 4px; padding: 16px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.server-text { display: flex; flex-direction: column; }
+.server-title { font-weight: bold; font-size: 18px; color: white; }
+.server-subtitle { font-size: 14px; color: #b8b8ff; margin-top: 2px; }
+.status-indicator { width: 16px; height: 16px; border-radius: 50%; background-color: yellow; flex-shrink: 0; }
