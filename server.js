@@ -15,7 +15,6 @@ const client = new Client({
     GatewayIntentBits.MessageContent
   ]
 });
-
 let status1 = {
   title: "EU Lategame Solo Server Loading!",
   subtitle: "EU Lategame Solo Server Is Loading!",
@@ -31,7 +30,6 @@ let status2 = {
   countdown: 0,
   countdownRunning: false
 };
-
 const CHANNEL_ID_1 = "1432106730162094185";
 const CHANNEL_ID_2 = "1432107616439500903";
 
@@ -58,14 +56,15 @@ setInterval(() => {
 }, 1000);
 
 client.on("messageCreate", (message) => {
-  if (message.author.bot) return;
-  const content = message.content.toLowerCase();
+  if (message.author.bot && !message.webhookId) return;
 
+  const content = message.content.toLowerCase();
   const extractNumber = text => text.match(/\d+/)?.[0] || "0";
 
   if (message.channelId === CHANNEL_ID_1) {
     if (content.includes("server up")) {
       status1.title = "EU Lategame Solo Server Joinable!";
+      status1.subtitle = "The server is currently joinable!";
       status1.color = "limegreen";
       status1.countdown = 120;
       status1.countdownRunning = true;
@@ -87,6 +86,7 @@ client.on("messageCreate", (message) => {
   if (message.channelId === CHANNEL_ID_2) {
     if (content.includes("server up")) {
       status2.title = "EU Duos Server Joinable!";
+      status2.subtitle = "The server is currently joinable!";
       status2.color = "limegreen";
       status2.countdown = 120;
       status2.countdownRunning = true;
@@ -111,6 +111,4 @@ app.get("/status", (req, res) => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-
 app.listen(3000, () => console.log("Server running on port 3000"));
-
